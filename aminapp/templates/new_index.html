@@ -1,0 +1,101 @@
+<html>
+    <head>
+        <title>
+            Excel file upload and processing : Django Example : ThePythonDjango.Com
+        </title>
+    <link rel="stylesheet" href="//cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    </head>
+    <body style="margin-top: 30px;margin-left: 30px;">
+        
+        <p></p>
+        <hr>
+        {% for msg in messages%}
+        {{msg}}
+        {%endfor%}
+
+        
+        
+        <table id="myTable">
+            <thead>
+                <th>id</th>
+                <th>Product Name</th>
+                <th>Lowcost</th>
+                <th>Variations & Stock </th>
+                <th>Last Update</th>
+            </thead>
+            {% for k in all_pro_data  %}
+            <tr>
+                <td>{{k.id}}</td>
+                <td>{{k.Product_name}}</td>
+                <td>{{k.lowcost}}</td>
+                
+                <td>
+                    <table id="myTable">
+                        <thead>
+                            <th>Variations</th>
+                            <th>Stock</th>
+                        </thead>
+                        {% for i in all_var_data %}
+                        {% if k.id == i.prodct_id %}
+                        <tr>
+                            <td>{{i.variation}}</td>
+                            <td>{{i.stock}}</td>
+                        </tr>
+                        {% endif%}
+                        {% endfor %}
+                    </table>
+                </td>
+                <td>{{k.last_update}}</td>
+            
+            </tr>
+            
+            {% endfor %}
+        </table>
+<!-- Trigger the modal with a button -->
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">ADD Products</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+  <div class="modal-dialog">
+  
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Drag and DROP your file here</h4>
+      </div>
+      <div class="modal-body">
+        <form action="{% url "adminapp:index" %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file"
+                   title="Upload excel file"
+                   name="excel_file"
+                   style="border: 1px solid black; padding: 5px;"
+                   required="required">
+            <p>
+            <input type="submit"
+                   value="Upload"
+                   style="border: 1px solid green; padding:5px; border-radius: 2px; cursor: pointer;">
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="//cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+        <script>
+            $(document).ready( function () {
+                    $('#myTable').DataTable();
+                } );
+        </script>
+    </body>
+</html>
